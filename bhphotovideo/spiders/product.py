@@ -16,12 +16,11 @@ class ProductSpider(scrapy.Spider):
         yield from response.follow_all(css='header div nav div ul li a', callback=self.parse_category)
     
     def parse_category(self, response):
-        yield from response.follow_all(css='a[data-selenium=categoryGroupLink]', callback=self.parse_product_list)
-    
-    def parse_product_list(self, response):
+        yield from response.follow_all(css='a[data-selenium=categoryGroupLink]', callback=self.parse_category)
+   
         links = response.css('[data-selenium=miniProductPageProductImgLink]')[0:10]
         yield from response.follow_all(links, callback=self.parse_product)
-    
+       
     def parse_product(self, response):
         yield {
             'categories':  ' / '.join(response.css('[data-selenium="linkCrumb"]::text').getall()[1:-1]),
