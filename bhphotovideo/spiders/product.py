@@ -17,7 +17,7 @@ class ProductSpider(scrapy.Spider):
     
     def parse_category(self, response):
         yield from response.follow_all(css='a[data-selenium=categoryGroupLink]', callback=self.parse_category)
-   
+        yield from response.follow_all(css='a[data-selenium=categoryGroupSubcategoriesListItemLink]', callback=self.parse_category)
         links = response.css('[data-selenium=miniProductPageProductImgLink]')[0:10]
         yield from response.follow_all(links, callback=self.parse_product)
        
